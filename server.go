@@ -17,5 +17,8 @@ func main() {
 	//e.PUT("/users/:id",updateUser)
 	//e.DELETE("/users/:id",deleteUser)
 	e.GET("/users/:id", controller.GetUser)
+	e.POST("/users",controller.SaveUser)
+	e.POST("/users/:id",controller.UpdateUser)
+	e.DELETE("/users/:id",controller.DeleteUser)
 	e.Logger.Fatal(e.Start(":1223"))
 }
