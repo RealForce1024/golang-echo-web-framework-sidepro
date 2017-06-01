@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"net/http"
 	"myecho/controller"
+	"myecho/model"
 )
 
 func main() {
@@ -19,20 +20,28 @@ func main() {
 
 	//path param
 	e.GET("/users/:id", controller.GetUser)
-	e.POST("/users",controller.SaveUser)
-	e.POST("/users/:id",controller.UpdateUser)
-	e.DELETE("/users/:id",controller.DeleteUser)
+	//e.POST("/users", controller.SaveUser)
+	e.POST("/users/:id", controller.UpdateUser)
+	e.DELETE("/users/:id", controller.DeleteUser)
 
 	//query param
-	e.GET("/show",controller.Show)
+	e.GET("/show", controller.Show)
 
 	//form param application/x-www-form-urlencoded
-	e.POST("/save",controller.Save)
+	e.POST("/save", controller.Save)
 
 	//form multipart/form-data
-	e.POST("/save",controller.SaveAvatar)
+	e.POST("/save", controller.SaveAvatar)
 
-
+	//$~  myecho [master] curl -F "name=fqc" -F "email=gomaster_me@sina.com" http://localhost:1323/users
+	//{"Id":0,"name":"fqc","email":"gomaster_me@sina.com"}%
+	e.POST("/users", func(c echo.Context) error {
+		u := new(model.User)
+		if err := c.Bind(u); err != nil {
+			return err
+		}
+		return c.JSON(http.StatusCreated, u)
+	})
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
