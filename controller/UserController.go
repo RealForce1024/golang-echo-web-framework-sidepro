@@ -33,11 +33,6 @@ func GetUser(c echo.Context) error {
 	return c.String(http.StatusOK, user.String())
 }
 
-func Show(c echo.Context) error {
-	name := c.QueryParam("name")
-	address := c.QueryParam("address")
-	return c.String(http.StatusOK, fmt.Sprintf("name:%s,address:%s",name,address))
-}
 func SaveUser(c echo.Context) error {
 	v, ok := Users[3]
 	if !ok {
@@ -87,5 +82,23 @@ func DeleteUser(c echo.Context) error {
 	result = fmt.Sprintf("delete %v ok", v)
 
 	delete(Users, nid)
+	return c.String(http.StatusOK, result)
+}
+
+//query params
+func Show(c echo.Context) error {
+	name := c.QueryParam("name")
+	address := c.QueryParam("address")
+	return c.String(http.StatusOK, fmt.Sprintf("name:%s,address:%s", name, address))
+}
+
+// form value
+//$~ curl -F "name=jordan" -F "email=gomaster_me@sina.com" http://localhost:1323/save
+//name:jordan,email:gomaster_me@sina.com
+func Save(c echo.Context) error {
+	result := ""
+	name := c.FormValue("name")
+	email := c.FormValue("email")
+	result = fmt.Sprintf("name:%s,email:%s", name, email)
 	return c.String(http.StatusOK, result)
 }
