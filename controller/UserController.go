@@ -20,7 +20,11 @@ func init() {
 func GetUser(c echo.Context) error {
 	id := c.Param("id")
 	result := id
-	nid, _ := strconv.Atoi(id)
+	nid, err := strconv.Atoi(id)
+	if err != nil {
+		result = fmt.Sprintf("id %q is not integer,please check", id)
+		return c.String(http.StatusBadRequest, result)
+	}
 	user, ok := Users[nid]
 	if !ok {
 		result = fmt.Sprintf("not found this id:%d", nid)
@@ -77,6 +81,6 @@ func DeleteUser(c echo.Context) error {
 
 	result = fmt.Sprintf("delete %v ok", v)
 
-	delete(Users,nid)
+	delete(Users, nid)
 	return c.String(http.StatusOK, result)
 }
