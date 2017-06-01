@@ -20,5 +20,7 @@ func main() {
 	e.POST("/users",controller.SaveUser)
 	e.POST("/users/:id",controller.UpdateUser)
 	e.DELETE("/users/:id",controller.DeleteUser)
+
+	e.GET("/show",controller.Show)
 	e.Logger.Fatal(e.Start(":1323"))
 }

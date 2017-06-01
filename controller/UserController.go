@@ -33,6 +33,11 @@ func GetUser(c echo.Context) error {
 	return c.String(http.StatusOK, user.String())
 }
 
+func Show(c echo.Context) error {
+	name := c.QueryParam("name")
+	address := c.QueryParam("address")
+	return c.String(http.StatusOK, fmt.Sprintf("name:%s,address:%s",name,address))
+}
 func SaveUser(c echo.Context) error {
 	v, ok := Users[3]
 	if !ok {
