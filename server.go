@@ -41,6 +41,10 @@ func main() {
 			return err
 		}
 		return c.JSON(http.StatusCreated, u)
+		//return c.XML(http.StatusCreated, u)
+		//☁  Desktop  curl -F "name=Joe Smith" -F "email=xxx@sina.com" http://localhost:1323/users
+		//<?xml version="1.0" encoding="UTF-8"?>
+		//<User><Id>0</Id><name>Joe Smith</name><email>xxx@sina.com</email></User>%
 	})
 
 	e.Logger.Fatal(e.Start(":1323"))
