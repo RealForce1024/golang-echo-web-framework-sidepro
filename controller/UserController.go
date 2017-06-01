@@ -6,6 +6,8 @@ import (
 	"myecho/model"
 	"strconv"
 	"fmt"
+	"os"
+	"io"
 )
 
 var Users = make(map[int]model.User, 5)
@@ -101,4 +103,38 @@ func Save(c echo.Context) error {
 	email := c.FormValue("email")
 	result = fmt.Sprintf("name:%s,email:%s", name, email)
 	return c.String(http.StatusOK, result)
+}
+
+// form multi-part/form-data
+//☁  myecho [master] ⚡ curl -F "name=fqc" -F "avatar=@/Users/fqc/Desktop/download.png" http://localhost:1323/save    [master|✚2
+//<b>Thank you! fqc</b>%
+func SaveAvatar(c echo.Context) error {
+	result := ""
+	name := c.FormValue("name")
+	avatar, err := c.FormFile("avatar")
+	if err != nil {
+		return err
+	}
+
+	src, err := avatar.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	dst, err := os.Create(avatar.Filename)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		return err
+	}
+
+	result = fmt.Sprintf("<b>Thank you! %s</b>", name)
+	//return c.String(http.StatusOK, result)
+	return c.HTML(http.StatusOK, result)
+	//return c.JSON(http.StatusOK,result)
 }
