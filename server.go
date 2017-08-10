@@ -5,10 +5,18 @@ import (
 	"net/http"
 	"myecho/controller"
 	"myecho/model"
+	"github.com/labstack/echo/middleware"
 )
 
+var e = echo.New()
+
+func init() {
+	// Root level middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+}
+
 func main() {
-	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello world")
 	})
